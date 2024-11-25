@@ -31,6 +31,9 @@ class Vector:
 # Nullable Array definition
 # -------------------------------------------------
 class Array:
+    def __init__(self):
+        self.array = self.new_1d_empty(0)
+
     def new_1d_empty(self, first_d: int, default_value=None):
         self.array = [default_value for _ in range(first_d)]
         return self.array
@@ -41,5 +44,21 @@ class Array:
         ]
         return self.array
 
-    def __init__(self):
-        self.array = self.new_1d_empty(0)
+
+def convert_array_to_1d(array):
+    """
+    Recursively flatten a nested structure of arbitrary depth into a 1D list.
+
+    Args:
+        nested_structure: A nested list or other iterable structure
+
+    Returns:
+        list: A 1D list containing all elements from the input structure
+    """
+    flat_list = []
+    for item in array:
+        if isinstance(item, (list, tuple)):
+            flat_list.extend(convert_array_to_1d(item))
+        else:
+            flat_list.append(item)
+    return flat_list

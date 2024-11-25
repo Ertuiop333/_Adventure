@@ -43,4 +43,6 @@ class Sprite_Library:
         ]
     )
 
-    player_sprite = Sprite([Pixel("P")])
+    player_sprite = Sprite([Pixel("P")], 10)
+
+    goblin_sprite = Sprite([Pixel("G")], 5)

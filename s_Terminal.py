@@ -72,7 +72,7 @@ def reset_in_game_screen(character=None, space=None, xSize=None, ySize=None):
         character = __character
     if space == None:
         space = __space_between_pixels
-    if xSize == 0:
+    if xSize == None:
         xSize = __x
     if ySize == None:
         ySize = __y

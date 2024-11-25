@@ -8,9 +8,11 @@ import _Entities as Entities
 
 import s_Terminal as Terminal
 import s_Visuals as Visuals
+import s_Collisions as Collisions
 
 import u_Logic as Logic
 import u_Rendering as Rendering
+import u_Physics as Physics
 
 SCREEN_WIDTH = 20
 SCREEN_HEIGHT = 20
@@ -18,10 +20,27 @@ SCREEN_HEIGHT = 20
 stop_game_event = False
 
 player = Entities.Fighter(
-    10, "Bob", Visuals.Sprite_Library.player_sprite, Types.Vector(2, 2)
+    10,
+    "Bob",
+    Visuals.Sprite_Library.player_sprite,
+    Types.Vector(2, 2),
+    Collisions.ColliderLibrary.single_point,
 )
 
-box = Entities.Entity("box", Visuals.Sprite_Library.default_square, Types.Vector(0, 0))
+box = Entities.Entity(
+    "box",
+    Visuals.Sprite_Library.default_square,
+    Types.Vector(0, 0),
+    Collisions.empty_box(5, 5),
+)
+
+enemy = Entities.Fighter(
+    5,
+    "Goblin",
+    Visuals.Sprite_Library.goblin_sprite,
+    Types.Vector(5, 5),
+    Collisions.ColliderLibrary.single_point,
+)
 
 
 def start():
@@ -32,6 +51,9 @@ def start():
     )
     Rendering.add_object_to_render_queue(
         Rendering.RenderObject(player.sprite, player.position)
+    )
+    Rendering.add_object_to_render_queue(
+        Rendering.RenderObject(enemy.sprite, enemy.position)
     )
 
 
@@ -58,7 +80,16 @@ def game_loop():
         if i == "a":
             player.position.x -= 1
         elif i == "d":
-            player.position.x += 1
+            if (
+                Physics.is_object_colliding_with_other_object(
+                    Physics.PhysicsObject(
+                        player.collider, player.position + Types.Vector(1, 0)
+                    ),
+                    Physics.PhysicsObject(box.collider, box.position),
+                )
+                == False
+            ):
+                player.position.x += 1
         elif i == "w":
             player.position.y -= 1
         elif i == "s":

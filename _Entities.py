@@ -2,10 +2,11 @@
 # Entity definition
 # -------------------------------------------------
 class Entity:
-    def __init__(self, name: str, sprite, position) -> None:
+    def __init__(self, name: str, sprite, position, collider=None) -> None:
         self.name = name
         self.sprite = sprite
         self.position = position
+        self.collider = collider
 
 
 class Fighter(Entity):
@@ -15,6 +16,7 @@ class Fighter(Entity):
         name: str,
         sprite,
         position,
+        collider=None,
     ):
         self.health = health
-        super().__init__(name, sprite, position)
+        super().__init__(name, sprite, position, collider)
