@@ -35,8 +35,6 @@ while con:
 
     Terminal.screen_data[x][y] = str(p.__is_area1_intersecting_with_area2(a, b))[0]
 
-    print("this is a modification worth your time!")
-
     x += 1
     if x >= len(Terminal.screen_data):
         x = 0
