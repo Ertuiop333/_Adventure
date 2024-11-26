@@ -44,6 +44,12 @@ class Vector:
             raise TypeError("Unsupported operand type for ==")
 
 
+class Area:
+    def __init__(self, origin: Vector, extent: Vector):
+        self.origin = origin
+        self.extent = extent
+
+
 # -------------------------------------------------
 # Nullable Array definition
 # -------------------------------------------------

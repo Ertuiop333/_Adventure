@@ -3,9 +3,9 @@
 ###     These depend on game logic
 
 import _Types as Types
-import _Entities as Entities
+import s_Entities as Entities
 
-import s_Terminal as Terminal
+import u_Components as Components
 
 import u_Physics as Physics
 
@@ -30,18 +30,33 @@ import u_Physics as Physics
 
 
 # -------------------------------------------------
-# Player movements
+# Entity movements
 # -------------------------------------------------
 
 
-# def try_move_entity(entity: Entities.Entity, move: Types.Vector) -> Types.Vector:
-#     collision_at_target_position = (
-#         Physics.is_object_colliding_with_any_other_registered_object(
-#             Physics.PhysicsObject(entity.collider, entity.position + move)
-#         )
-#     )
+def move_entity(entity: Entities.Entity, movement: Types.Vector, box: Entities.Entity):
+    entity.position += movement
+    physic_component = entity.try_get_component_of_type(Components.Physic)
+    if physic_component != None:
+        if (
+            Physics.is_object_colliding_with_other_object(
+                physic_component, box.components[1]
+            )
+            == True
+        ):
+            entity.position -= movement
 
-#     if collision_at_target_position:
-#         return entity.position
-#     else:
-#         return entity.position + move
+
+def handle_move_inputs(i: str) -> Types.Vector:
+    move = Types.Vector(0, 0)
+
+    if i == "a":
+        move = Types.Vector(-1, 0)
+    elif i == "d":
+        move = Types.Vector(1, 0)
+    elif i == "w":
+        move = Types.Vector(0, -1)
+    elif i == "s":
+        move = Types.Vector(0, 1)
+
+    return move
