@@ -47,4 +47,5 @@ def __evaluate_z_order(object: RenderObject):
 def write_render_queue_to_screen_data():
     __render_queue.array.sort(key=__evaluate_z_order)
     for o in __render_queue.array:
+        input(o)
         __write_render_object_to_screen_data(o)

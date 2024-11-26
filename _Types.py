@@ -26,6 +26,23 @@ class Vector:
         else:
             raise TypeError("Unsupported operand type for +")
 
+    def __sub__(self, other):
+        if isinstance(other, Vector):
+            return Vector(self.x - other.x, self.y - other.y)
+        elif isinstance(other, (int, float)):
+            return Vector(self.x - other, self.y - other)
+        else:
+            raise TypeError("Unsupported operand type for -")
+
+    def __eq__(self, other):
+        if isinstance(other, Vector):
+            is_equal = False
+            if other.x == self.x and other.y == self.y:
+                is_equal = True
+            return is_equal
+        else:
+            raise TypeError("Unsupported operand type for ==")
+
 
 # -------------------------------------------------
 # Nullable Array definition
@@ -34,11 +51,11 @@ class Array:
     def __init__(self):
         self.array = self.new_1d_empty(0)
 
-    def new_1d_empty(self, first_d: int, default_value=None):
+    def new_1d_empty(self, first_d: int = 0, default_value=None):
         self.array = [default_value for _ in range(first_d)]
         return self.array
 
-    def new_2d_empty(self, first_d: int, second_d: int, default_value=None):
+    def new_2d_empty(self, first_d: int = 0, second_d: int = 0, default_value=None):
         self.array = [
             self.new_1d_empty(second_d, default_value) for _ in range(first_d)
         ]

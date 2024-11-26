@@ -21,16 +21,19 @@ def clear_terminal():
 
 def create_choice_prompt(
     action_list: Types.Array,
-    prompt_message="\nwhich one? : ",
-    error_message="wait... that's not an action! pick one of these:",
+    print_action_list=True,
+    prompt_message="\nQu'allez-vous faire?",
+    error_message="Cette entrée est invalide. Veuillez réessayer.",
 ):
     input_valid = False
 
     while input_valid != True:
-        i = 1
-        for c in action_list:
-            print(str(i) + "- " + c)
-            i += 1
+        if print_action_list:
+            i = 1
+            for k in action_list:
+                print(str(i) + "- " + k)
+                i += 1
+
         test_input = input(prompt_message).lower()
 
         # for users that enter the numbers
@@ -40,10 +43,16 @@ def create_choice_prompt(
         except:
             pass
 
-        # for users that enter the text
-        for c in action_list:
-            if test_input == c:
-                return c
+        # for users that enter the key
+        for k in action_list:
+            if test_input == k[1]:
+                return k[1]
+
+        if test_input == "":
+            return ""
+
+        if len(test_input) > 30 or test_input == "quit" or test_input == "q":
+            return "quit"
 
         print(error_message)
 

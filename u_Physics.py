@@ -6,11 +6,47 @@ import _Types as Types
 
 import s_Collisions as Collisions
 
+random_ids = [
+    13455132,
+    13534513,
+    134134,
+    1341234,
+    13145645,
+    24515,
+    6254141,
+    65523454,
+    543224355646543,
+    332,
+    54324532546,
+    23411324,
+    87698534,
+    554276,
+    23567,
+    25465,
+    765,
+    654,
+    422435643,
+]
+
+
+i = 0
+
 
 class PhysicsObject:
-    def __init__(self, collider: Collisions.PointsCollider, position: Types.Vector):
+    def __init__(
+        self,
+        collider: Collisions.PointsCollider,
+        position: Types.Vector,
+        identification: str = "1234",
+    ):
         self.collider = collider
         self.position = position
+        if identification == "1234":
+            global i
+            self.identification = random_ids[i]
+            i += 1
+        else:
+            self.identification = identification
 
 
 __physics_objects = Types.Array().array
@@ -109,26 +145,26 @@ def __is_area1_intersecting_with_area2(area1: Collisions.Area, area2: Collisions
     return False
 
 
-def is_position_intersecting_with_object(
-    position: Types.Vector, object: PhysicsObject
+# tested
+def is_world_position_intersecting_with_object(
+    world_position: Types.Vector, object: PhysicsObject
 ) -> bool:
     # first check if a collision is possible at the position in the collider's area
     if __is_point_intersecting_area(
-        position,
+        world_position,
         Collisions.Area(
             object.collider.area.origin + object.position,
             object.collider.area.extent + object.position,
         ),
     ):
-        input("lol")
         # then check for individual points in the physics_object's collider
         for p in object.collider.points:
-            if (p + object.position) == position:
+            if p + object.position == world_position:
                 return True
-
     return False
 
 
+# tested
 def is_object_colliding_with_other_object(
     object1: PhysicsObject, object2: PhysicsObject
 ) -> bool:
@@ -145,13 +181,16 @@ def is_object_colliding_with_other_object(
     ):
         # then check their individual points for intersection
         for p in object1.collider.points:
-            if is_position_intersecting_with_object(p, object2):
+            if is_world_position_intersecting_with_object(
+                p + object1.position, object2
+            ):
                 return True
     return False
 
 
 def is_object_colliding_with_any_other_registered_object(object: PhysicsObject) -> bool:
     for o in __physics_objects:
-        if is_object_colliding_with_other_object(o, object):
-            return True
+        if object.identification != o.identification:
+            if is_object_colliding_with_other_object(o, object):
+                return True
     return False
